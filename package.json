@@ -1,26 +1,29 @@
 {
-  "name": "template",
+  "name": "battleship",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "webpack --config webpack.prod.js",
-    "dev":"webpack serve --config webpack.dev.js",
+    "dev": "webpack serve --config webpack.dev.js",
     "deploy": "git subtree push --prefix dist origin gh-pages"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Coralie86/Restaurant.git"
+    "url": "git+https://github.com/Coralie86/battleship"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Coralie86/Restaurant/issues"
+    "url": "https://github.com/Coralie86/battleship/issues"
   },
-  "homepage": "https://github.com/Coralie86/Restaurant#readme",
+  "homepage": "https://github.com/Coralie86/battleship#readme",
   "devDependencies": {
+    "@babel/core": "^7.28.5",
+    "@babel/preset-env": "^7.28.5",
+    "babel-jest": "^30.2.0",
     "css-loader": "^7.1.2",
     "html-webpack-plugin": "^5.6.4",
     "style-loader": "^4.0.0",
