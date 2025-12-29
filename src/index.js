@@ -4,28 +4,34 @@ import { GameUI } from "./gameui";
 
 
 class GameController{
-    playerPlaceholder = document.querySelector("#playerName");
-
+    
     constructor(){
-
-        this.player1 = new Player(prompt("Name Player 1?"), 'real');
-        this.player2 = new Player(prompt("Name Player 2?"), 'real');
-
-        this.turn = this.player1.name;
-        this.playerPlaceholder.textContent = this.turn;
-        this.handleTurn = this.handleTurn.bind(this);
+        this.player1 = null;
+        this.player2 = null;
+        this.turn = null;
+        this.playerPlaceholder = null;
 
         this.game = new GameUI();
-        this.game.initGrid();
 
-        this.startGame();
+        this.startGame = this.startGame.bind(this);
+        this.game.setStartHandler(this.startGame);
 
-        this.game.setAttackHandler(this.handleTurn)
+        this.handleTurn = this.handleTurn.bind(this);
+        this.game.setAttackHandler(this.handleTurn);
 
     }
 
     startGame(){
+        let players = this.game.playerName();
+        this.player1 = new Player(players.player1.name, players.player1.type);
+        this.player2 = new Player(players.player2.name, players.player2.type);
 
+        this.game.initGrid();
+        this.playerPlaceholder = document.querySelector("#playerName");
+
+        this.turn = this.player1.name;
+        this.playerPlaceholder.textContent = this.turn;
+        
         this.defaultShipPlacement(this.player1.playerGameboard)
         this.defaultShipPlacement(this.player2.playerGameboard)
 
@@ -65,12 +71,36 @@ class GameController{
         // }
     }
 
-    handleTurn(row, col){
-        if(this.turn === this.player1.name){
-            this.playerAttack(this.player1, this.player2, row,col)
-        } else if(this.turn === this.player2.name){
-            this.playerAttack(this.player2, this.player1, row,col)
+    playWithComputer(player, opponent, col, row){
+        player.attack(opponent.playerGameboard, col, row)
+
+        if(opponent.playerGameboard.shipStatus()){
+            this.playerPlaceholder.textContent = this.turn + " WINNER";
+            return
         }
+
+        opponent.randomAttack(player.playerGameboard)
+
+        if(opponent.playerGameboard.shipStatus()){
+            this.playerPlaceholder.textContent = this.turn + " WINNER";
+            return
+        }
+
+        this.game.renderPlayer1Board(player.playerGameboard)
+        this.game.renderPlayer2Board(opponent.playerGameboard)
+    }
+
+    handleTurn(row, col){
+        if(this.player2.name !== 'computer'){
+            if(this.turn === this.player1.name){
+                this.playerAttack(this.player1, this.player2, row,col)
+            } else if(this.turn === this.player2.name){
+                this.playerAttack(this.player2, this.player1, row,col)
+            }
+        } else {
+            this.playWithComputer(this.player2, this.player1, col, row);
+        }
+        
     }
 }
 

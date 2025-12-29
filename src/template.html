@@ -7,12 +7,31 @@
 </head>
 <body>
     <h1>BATTLESHIP</h1>
-    <div id="playerName">PLAYER</div>
-    <div id="boards">
-        <div id="player1grid" class="grid">
+    <div id="firstPage">
+        <div id="playerBox">
+            <div id="player1field">
+                <label for="player1">Player 1:</label>
+                <input type="text" id="player1" name="player1" class="player">
+            </div>
+            <div id="optionPlayer2">
+                <label for="option">Currently you are against the computer.<br> Do you want to play against another Player?</label>
+                <input type="checkbox" id="option" name="option">
+            </div>
+            <div id="player2field" style="display: none;">
+                <label for="player2">Player 2:</label>
+                <input id="player2" name="player2" class="player" value="">
+            </div>
+            <button id="start">Start Game</button>
         </div>
-        <div id="player2grid" class="grid">
-        </div>        
+    </div>
+    <div id="game">
+        <div id="playerName">PLAYER</div>
+        <div id="boards">
+            <div id="player1grid" class="grid">
+            </div>
+            <div id="player2grid" class="grid">
+            </div>        
+        </div>
     </div>
 </body>
     

@@ -3,8 +3,32 @@ export class GameUI {
     constructor(){
         this.player1Grid = document.querySelector("#player1grid");
         this.player2Grid = document.querySelector("#player2grid");
+        this.playerBox = document.querySelector("#playerBox");
+        this.secondPage = document.querySelector("#game");
 
         this.attackHandler = null;
+        this.startHandler = null;
+
+        this.createFirstPage();
+    }
+
+    createFirstPage(){        
+        this.secondPage.style.display = 'none';
+
+        let player2div = document.querySelector("#player2field");
+
+        const checkbox = document.querySelector("#option")
+        checkbox.addEventListener('change', function () {
+            if(this.checked){
+                player2div.style.display = 'block';
+            } else {
+                player2div.style.display = 'none';
+            }
+        })
+
+        const startBtn = document.querySelector("#start");
+        startBtn.addEventListener('click', () =>{this.startHandler()})
+
     }
 
     createGrid(grid, hidden){
@@ -45,7 +69,13 @@ export class GameUI {
         this.attackHandler = handler;
     }
 
+    setStartHandler(handler){
+        this.startHandler = handler;
+    }
+
     initGrid(){
+        this.playerBox.style.display = 'none';
+        this.secondPage.style.display = 'block';
         this.createGrid(this.player1Grid, false);
         this.createGrid(this.player2Grid, true);
     }   
@@ -76,6 +106,15 @@ export class GameUI {
     }
 
     maskShip(gameboard){
+    }
+    
+    playerName(){
+        let player1 = {"name": document.querySelector("#player1").value, "type": 'real'};
+        let player2 = {"name": document.querySelector("#player2").value, "type":'real'};
         
+        if(player2.name === ""){
+            player2 = {"name":'computer', "type": "computer"}
+        }
+        return {player1, player2}
     }
 }
