@@ -9,13 +9,13 @@ export class Ship {
 
     hit(){
         this.hits += 1;
+        this.isSunk();
     }
 
     isSunk(){
         if(this.length === this.hits){
             this.sunk = true;
         }
-        return this.sunk
     }
 
 }

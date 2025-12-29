@@ -1,4 +1,5 @@
 import { Ship } from "./ship";
+import { changePlayer } from ".";
 
 export class Gameboard {
     board = new Array(10).fill(null).map(() => new Array(10).fill(''))
@@ -22,20 +23,35 @@ export class Gameboard {
             let ship = new Ship(d-b+1);
             let coord = [];
             for(let i = b; i<=d; i++){
-                this.board[i][a] = 'X';
+                this.board[i][a] = {"mark":'X', "ship": ship};
                 coord.push([this.inverseTranslateColumn(a), this.inverseTranslateRow(i)])
             }
-            this.shipList.push({"length":ship.length, "coord": coord})
+            this.shipList.push({"ship":ship, "coord": coord})
         } else if(b === d){
             let ship = new Ship(c-a+1);
             let coord = [];
             for(let i = a; i <= c; i++){
-                this.board[b][i] = 'X';
+                this.board[b][i] = {"mark":'X', "ship": ship};
                 coord.push([this.inverseTranslateColumn(i), this.inverseTranslateRow(b)])
             }
-            this.shipList.push({"length":ship.length, "coord": coord})
+            this.shipList.push({"ship":ship, "coord": coord})
         }
 
+    }
+
+    receiveAttack(col,row){
+        
+        if(this.board[row][col].mark === 'X'){
+            let shipHit = this.board[row][col].ship;
+            shipHit.hit()
+            this.board[row][col].mark = 'T';
+        } else if(this.board[row][col] === ''){
+            this.board[row][col] = {"mark":'O'};
+        }
+    }
+
+    shipStatus() {
+        return this.shipList.every(x => x.ship.sunk )
     }
 
     translateColumn(col){
@@ -58,14 +74,6 @@ export class Gameboard {
         return rowArr[row]
     }
 
-    cellTaken([x,y]){
-        if(this.board[x][y] !== ''){
-            return true
-        }else {
-            return false
-        }
-    }
-
     spaceAvailable([a,b], [c,d]){
         for(let j = a; j <= c; j++){
             for(let i = b; i <= d; i++){
@@ -76,5 +84,5 @@ export class Gameboard {
         return true
         }
     }
-    
 }
+
