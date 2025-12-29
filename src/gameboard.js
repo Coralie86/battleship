@@ -1,5 +1,4 @@
 import { Ship } from "./ship";
-import { changePlayer } from ".";
 
 export class Gameboard {
     board = new Array(10).fill(null).map(() => new Array(10).fill(''))

@@ -44,6 +44,7 @@ class GameController{
     gameboard.placeShip(['G',8], ['I',8]);
     gameboard.placeShip(['A',9], ['B',9]);
     gameboard.placeShip(['I',10], ['I',10]);
+    console.log(gameboard.shipList)
     }
 
     playerAttack(player,opponent, row,col){

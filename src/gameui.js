@@ -74,4 +74,8 @@ export class GameUI {
             cell.textContent = gameboard.board[row][col].mark;
         }
     }
+
+    maskShip(gameboard){
+        
+    }
 }
