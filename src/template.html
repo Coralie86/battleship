@@ -21,16 +21,19 @@
                 <label for="player2">Player 2:</label>
                 <input id="player2" name="player2" class="player" value="">
             </div>
-            <button id="start">Start Game</button>
+            <button id="nextBtn">Next</button>
         </div>
     </div>
     <div id="game">
+        <button id="NewGame">NEW GAME</button>
         <div id="playerName">PLAYER</div>
         <div id="boards">
             <div id="player1grid" class="grid">
             </div>
-            <div id="player2grid" class="grid">
-            </div>        
+            <button id="startGame" style="display: none;">Start Game</button>
+            <div id="player2grid" class="grid" style="display: none;">
+            </div>   
+            <button id="resetBtn" style="display: none;">Reset</button>     
         </div>
     </div>
 </body>

@@ -3,8 +3,9 @@
 export class Ship {
     hits = 0;
     sunk = false;
-    constructor(length){
+    constructor(length, direction){
         this.length = length;
+        this.direction= direction;
     }
 
     hit(){

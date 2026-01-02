@@ -4,48 +4,55 @@ export class Gameboard {
     board = new Array(10).fill(null).map(() => new Array(10).fill(''))
     shipList = [];
 
-    placeShip([A,B], [C,D]){
-        let a = this.translateColumn(A);
-        let c = this.translateColumn(C);
-        let b = this.translateRow(B);
-        let d = this.translateRow(D);
+    placeShip([row,col], length, direction){
+        let end = [0,0];
+        if(direction === 'vertical'){
+            end[0] = row + Number(length) -1;
+            end[1] = col;
+        } else {
+            end[1] = col + Number(length) -1;
+            end[0] = row;
+        }
 
-        if(![a,b,c,d].every(x => x >= 0 && x <= 9)){
+        if(![row,col,end[0],end[1]].every(x => x >= 0 && x <= 9)){
             throw new Error('Coordinates out of board 10 x 10')
         }
 
-        if(!this.spaceAvailable([a,b], [c,d])){
+        if(!this.spaceAvailable([row,col], end)){
             throw new Error('Space not available')
         }
 
-        if(a === c){
-            let ship = new Ship(d-b+1);
+        if(col === end[1]){
+            let ship = new Ship(end[0]-row+1, direction);
             let coord = [];
-            for(let i = b; i<=d; i++){
-                this.board[i][a] = {"mark":'X', "ship": ship};
-                coord.push([this.inverseTranslateColumn(a), this.inverseTranslateRow(i)])
+            for(let i = row; i<=end[0]; i++){
+                this.board[i][col] = 'X';
+                coord.push([i, col])
             }
-            this.shipList.push({"ship":ship, "coord": coord})
-        } else if(b === d){
-            let ship = new Ship(c-a+1);
+            this.shipList.push({"ship":ship, "id": `ship-r${row}-c${col}`, "coord": coord})
+        } else if(row === end[0]){
+            let ship = new Ship(end[1]-col+1, direction);
             let coord = [];
-            for(let i = a; i <= c; i++){
-                this.board[b][i] = {"mark":'X', "ship": ship};
-                coord.push([this.inverseTranslateColumn(i), this.inverseTranslateRow(b)])
+            for(let i = col; i <= end[1]; i++){
+                this.board[row][i] = 'X';
+                coord.push([row, i])
             }
-            this.shipList.push({"ship":ship, "coord": coord})
+            this.shipList.push({"ship":ship, "id": `ship-r${row}-c${col}`, "coord": coord})
         }
-
     }
 
-    receiveAttack(col,row){
+    receiveAttack(row,col){
+        let shipTouched = this.shipList.find((item) => {
+            return (item.coord.find(([r,c]) => {
+                return (r === row && c ===col);
+            }))
+        })
         
-        if(this.board[row][col].mark === 'X'){
-            let shipHit = this.board[row][col].ship;
-            shipHit.hit()
-            this.board[row][col].mark = 'T';
+        if(shipTouched){
+            shipTouched.ship.hit()
+            this.board[row][col] = 'T';
         } else if(this.board[row][col] === ''){
-            this.board[row][col] = {"mark":'O'};
+            this.board[row][col] = 'O';
         }
     }
 
@@ -53,29 +60,9 @@ export class Gameboard {
         return this.shipList.every(x => x.ship.sunk )
     }
 
-    translateColumn(col){
-        const colArr = "ABCDEFGHIJ".split('');
-        return colArr.indexOf(col)
-    }
-
-    inverseTranslateColumn(col){
-        const colArr = "ABCDEFGHIJ".split('');
-        return colArr[col]
-    }
-
-    translateRow(row){
-        const rowArr = [1,2,3,4,5,6,7,8,9,10];
-        return rowArr.indexOf(row)
-    }
-
-    inverseTranslateRow(row){
-        const rowArr = [1,2,3,4,5,6,7,8,9,10];
-        return rowArr[row]
-    }
-
     spaceAvailable([a,b], [c,d]){
-        for(let j = a; j <= c; j++){
-            for(let i = b; i <= d; i++){
+        for(let j = b; j <= d; j++){
+            for(let i = a; i <= c; i++){
                 if(this.board[i][j] !== ''){
                     return false
                 }
@@ -83,5 +70,12 @@ export class Gameboard {
         return true
         }
     }
+
+    removeShip(shipId){        
+        const shipRemoved = this.shipList.find((item) => item.id == shipId);
+        this.shipList.splice(this.shipList.indexOf(shipRemoved), 1);
+        shipRemoved.coord.forEach(coor => this.board[coor[0]][coor[1]] = '');
+    }
+
 }
 
