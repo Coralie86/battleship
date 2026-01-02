@@ -77,5 +77,15 @@ export class Gameboard {
         shipRemoved.coord.forEach(coor => this.board[coor[0]][coor[1]] = '');
     }
 
+    rotateShip(shipId){
+        let ship = this.shipList.find((item) => item.id === shipId);
+        if(ship.ship.direction === "vertical"){
+            ship.ship.direction = "horizontal";
+        } else {
+            ship.ship.direction = "vertical";
+        }
+        this.removeShip(shipId);
+        this.placeShip([ship.coord[0][0], ship.coord[0][1]],ship.ship.length, ship.ship.direction);
+    }
 }
 

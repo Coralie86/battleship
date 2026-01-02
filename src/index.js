@@ -9,7 +9,6 @@ class GameController{
         this.player1 = null;
         this.player2 = null;
         this.turn = null;
-        this.playerPlaceholder = null;
 
         this.game = new GameUI();
 
@@ -29,46 +28,39 @@ class GameController{
     }
 
     nextGame(){
-        console.log(this.player1);
-        console.log(this.player2);
         let players = this.game.playerName();
+        if(players.player2.name === ""){
+            players.player2 = {"name":'computer', "type": "computer"};
+        }
         this.player1 = new Player(players.player1.name, players.player1.type);
         this.player2 = new Player(players.player2.name, players.player2.type);
+        
 
         this.game.initGrid();
-        this.playerPlaceholder = document.querySelector("#playerName");
 
         this.turn = this.player1.name;
-        this.playerPlaceholder.textContent = this.turn;
+        this.game.playerPlaceholderUpdate(this.turn);
         
         this.defaultShipPlacement(this.player1.playerGameboard)
         this.defaultShipPlacement(this.player2.playerGameboard)
 
-        this.game.renderPlayer1Board(this.player1.playerGameboard)
-        this.game.renderPlayer2Board(this.player2.playerGameboard)
-
-        this.game.dragAllShip();
+        this.game.renderPlayer1Board(this.player1.playerGameboard, true)
+        this.game.renderPlayer2Board(this.player2.playerGameboard, false)
     }
 
     startGame(){
         if((this.turn === this.player1.name) && (this.player2.name !== "computer")){
             this.turn = this.player2.name;
-            this.game.renderPlayer1Board(this.player2.playerGameboard);
-            this.playerPlaceholder.textContent = "Player2 position your ships";
 
-            this.game.dragAllShip();
+            this.game.renderPlayer1Board(this.player2.playerGameboard, true);
+            this.game.playerPlaceholderUpdate("Player2 position your ships")
         } else {
             this.turn = this.player1.name;
-            this.game.renderPlayer1Board(this.player1.playerGameboard);
+            this.game.playerPlaceholderUpdate(this.turn);
+            this.game.renderPlayer1Board(this.player1.playerGameboard, false);
+            this.game.renderPlayer2Board(this.player2.playerGameboard, false);
 
-            const startBtn = document.querySelector("#startGame");
-            startBtn.style.display = 'none';
-
-            this.game.player2Grid.style.display = 'block';
-            this.game.renderPlayer2Board(this.player2.playerGameboard);
-
-            const resetBtn = document.querySelector("#resetBtn");
-            resetBtn.style.display = 'block';
+            this.game.inGameState();
         }
     }
 
@@ -89,35 +81,35 @@ class GameController{
         player.attack(opponent.playerGameboard, row, col)
 
         if(opponent.playerGameboard.shipStatus()){
-            this.playerPlaceholder.textContent = this.turn + " WINNER";
+            this.game.playerPlaceholderUpdate(this.turn + " WINNER");
             return
         }
 
         // after attack we show opponent view
         // if(opponent.password === prompt(`Password ${opponent.name}`)){
-            this.game.renderPlayer1Board(opponent.playerGameboard)
-            this.game.renderPlayer2Board(player.playerGameboard)
+            this.game.renderPlayer1Board(opponent.playerGameboard, false)
+            this.game.renderPlayer2Board(player.playerGameboard, false)
 
             this.turn = opponent.name;
-            this.playerPlaceholder.textContent = this.turn;
+            this.game.playerPlaceholderUpdate(this.turn);
         // }
     }
 
     playWithComputer(player, opponent, row, col){
 
         player.attack(opponent.playerGameboard, row, col)
-        this.game.renderPlayer2Board(opponent.playerGameboard)
+        this.game.renderPlayer2Board(opponent.playerGameboard, false)
 
         if(opponent.playerGameboard.shipStatus()){
-            this.playerPlaceholder.textContent = this.turn + " WINNER";
+            this.game.playerPlaceholderUpdate(this.turn + " WINNER");
             return
         }
 
         opponent.randomAttack(player.playerGameboard)
-        this.game.renderPlayer1Board(player.playerGameboard)        
+        this.game.renderPlayer1Board(player.playerGameboard, false)        
 
         if(opponent.playerGameboard.shipStatus()){
-            this.playerPlaceholder.textContent = this.turn + " WINNER";
+            this.game.playerPlaceholderUpdate(this.turn + " WINNER");
             return
         }       
         
@@ -157,8 +149,7 @@ class GameController{
         currentPlayer.playerGameboard.placeShip([newStartRow, newStartCol], shipMoved.ship.length, shipMoved.ship.direction)
         
         ev.target.appendChild(document.getElementById(data));
-        this.game.renderPlayer1Board(currentPlayer.playerGameboard);
-        this.game.dragAllShip();
+        this.game.renderPlayer1Board(currentPlayer.playerGameboard, true);
     }
 }
 

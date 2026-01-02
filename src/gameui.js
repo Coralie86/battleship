@@ -8,6 +8,10 @@ export class GameUI {
         this.startBtn = document.querySelector("#startGame");
         this.resetBtn = document.querySelector("#resetBtn");
         this.newGameBtn = document.querySelector("#NewGame");
+        this.playerPlaceholder = document.querySelector("#playerName");
+        this.nextBtn = document.querySelector("#nextBtn");
+        this.player2div = document.querySelector("#player2field");
+        this.checkbox = document.querySelector("#option");
 
         this.attackHandler = null;
         this.nextHandler = null;
@@ -18,27 +22,30 @@ export class GameUI {
         this.startBtn.addEventListener('click', () => {this.startHandler()});
         this.resetBtn.addEventListener('click', () =>{this.reset()});
         this.newGameBtn.addEventListener('click', () =>{this.initialize()});
+        this.nextBtn.addEventListener('click', () =>{this.nextHandler()});
+        this.checkbox.addEventListener('change', () => {
+            if(this.checkbox.checked){
+                this.player2div.style.display = 'block';
+            } else {
+                this.player2div.style.display = 'none';
+            }
+        })
 
         this.createFirstPage();
     }
 
     createFirstPage(){        
-        this.secondPage.style.display = 'none';
-
-        let player2div = document.querySelector("#player2field");
-
-        const checkbox = document.querySelector("#option")
-        checkbox.addEventListener('change', function () {
-            if(this.checked){
-                player2div.style.display = 'block';
-            } else {
-                player2div.style.display = 'none';
-            }
-        })
-
-        const nextBtn = document.querySelector("#nextBtn");
-        nextBtn.addEventListener('click', () =>{this.nextHandler()})
+        this.secondPage.style.display = 'none';        
     }
+
+    initGrid(){
+        this.playerBox.style.display = 'none';
+        this.secondPage.style.display = 'block';
+        this.startBtn.style.display = 'block';
+
+        this.createGrid(this.player1Grid, false);
+        this.createGrid(this.player2Grid, true);
+    } 
 
     createGrid(grid, hidden){
         if(hidden === false){
@@ -112,26 +119,18 @@ export class GameUI {
         this.playerBox.style.display = 'block';
         this.resetBtn.style.display = 'none';
         this.player2Grid.style.display = 'none';
-    }
+    }      
 
-    initGrid(){
-        this.playerBox.style.display = 'none';
-        this.secondPage.style.display = 'block';
-        this.startBtn.style.display = 'block';
-
-        this.createGrid(this.player1Grid, false);
-        this.createGrid(this.player2Grid, true);
-    }   
-
-    renderPlayer1Board(gameboard){
+    renderPlayer1Board(gameboard, draggable){
         let cells = this.player1Grid.querySelectorAll(".cell");
         cells.forEach(cell => {
+            
             if(cell.querySelector(".ship") !== null){
                 cell.removeChild(cell.querySelector(".ship"))
             }
             this.updateCell(cell, gameboard)
         })
-        this.maskShip(gameboard)
+        this.maskShip(gameboard, draggable)
     }
 
     renderPlayer2Board(gameboard){
@@ -154,7 +153,8 @@ export class GameUI {
         }
     }
 
-    maskShip(gameboard){
+    maskShip(gameboard, draggable){
+        
         gameboard.shipList.forEach(ship => {
             let length = ship.ship.length;
             let start = ship.coord[0];
@@ -173,31 +173,16 @@ export class GameUI {
                 shipMask.style.width = '42px';
                 shipMask.style.height = `${length * 42}px`;                
             }
-            shipMask.addEventListener('click', () => {
-                if(ship.ship.direction === 'vertical'){
-                    ship.ship.direction = 'horizontal';
-                    shipMask.style.width = `${length * 42}px`;
-                    shipMask.style.height = '42px';
-                    gameboard.removeShip(ship.id);
-                    gameboard.placeShip([Number(row), Number(col)],ship.ship.length, ship.ship.direction)                    
-                } else {
-                    ship.ship.direction = 'vertical';
-                    shipMask.style.width = '42px';
-                    shipMask.style.height = `${length * 42}px`;
-                    gameboard.removeShip(ship.id);
-                    gameboard.placeShip([Number(row), Number(col)],ship.ship.length, ship.ship.direction)                    
-                }
-            })
+            if(draggable){
+                shipMask.draggable = true;
+                shipMask.style.cursor = 'pointer';
+                shipMask.addEventListener('dragstart', (ev) => {this.dragStartHandler(ev)});
+                shipMask.addEventListener('click', () => {
+                    gameboard.rotateShip(ship.id);
+                    this.renderPlayer1Board(gameboard, true);                
+                })
+            }            
             cellStart.appendChild(shipMask);   
-        })
-    }
-
-    dragAllShip(){
-        const ships = this.player1Grid.querySelectorAll(".ship")
-        ships.forEach((ship) => {
-            ship.draggable = true;
-            ship.style.cursor = 'pointer';
-            ship.addEventListener('dragstart', (ev) => {this.dragStartHandler(ev)});
         })
     }
 
@@ -205,9 +190,6 @@ export class GameUI {
         let player1 = {"name": document.querySelector("#player1").value, "type": 'real'};
         let player2 = {"name": document.querySelector("#player2").value, "type":'real'};
         
-        if(player2.name === ""){
-            player2 = {"name":'computer', "type": "computer"}
-        }
         return {player1, player2}
     }
 
@@ -221,15 +203,25 @@ export class GameUI {
 
     emptyGrid(){
         const grid1Placeholder = this.player1Grid.querySelector(".placeholder")
-        this.player1Grid.removeChild(grid1Placeholder)
+        if(grid1Placeholder){this.player1Grid.removeChild(grid1Placeholder)}
         this.player1Grid.querySelectorAll(".row").forEach( (div) => {
             this.player1Grid.removeChild(div);
         })
 
         const grid2Placeholder = this.player2Grid.querySelector(".placeholder")
-        this.player2Grid.removeChild(grid2Placeholder)
+        if(grid2Placeholder){this.player2Grid.removeChild(grid2Placeholder)}
         this.player2Grid.querySelectorAll(".row").forEach( (div) => {
             this.player2Grid.removeChild(div);
         })
+    }
+
+    playerPlaceholderUpdate(text){
+        this.playerPlaceholder.textContent = text;
+    }
+
+    inGameState(){
+        this.startBtn.style.display = 'none';
+        this.player2Grid.style.display = 'block';
+        this.resetBtn.style.display = 'block';
     }
 }
