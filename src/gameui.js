@@ -7,6 +7,7 @@ export class GameUI {
         this.secondPage = document.querySelector("#game");
         this.startBtn = document.querySelector("#startGame");
         this.resetBtn = document.querySelector("#resetBtn");
+        this.newGameBtn = document.querySelector("#NewGame");
 
         this.attackHandler = null;
         this.nextHandler = null;
@@ -15,7 +16,8 @@ export class GameUI {
         this.resetHandler = null;
 
         this.startBtn.addEventListener('click', () => {this.startHandler()});
-        this.resetBtn.addEventListener('click', () =>{this.resetHandler()})
+        this.resetBtn.addEventListener('click', () =>{this.reset()});
+        this.newGameBtn.addEventListener('click', () =>{this.initialize()});
 
         this.createFirstPage();
     }
@@ -94,6 +96,22 @@ export class GameUI {
 
     setResetHandler(handler){
         this.resetHandler = handler;
+    }
+
+    reset(){
+        this.emptyGrid();
+
+        this.resetBtn.style.display = 'none';
+        this.player2Grid.style.display = 'none';
+        this.resetHandler();
+    }
+
+    initialize(){
+        this.emptyGrid();
+        this.secondPage.style.display = 'none';
+        this.playerBox.style.display = 'block';
+        this.resetBtn.style.display = 'none';
+        this.player2Grid.style.display = 'none';
     }
 
     initGrid(){

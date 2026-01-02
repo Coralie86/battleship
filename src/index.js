@@ -25,12 +25,12 @@ class GameController{
         this.dropHandler = this.dropHandler.bind(this);
         this.game.setDropHandler(this.dropHandler);
 
-        this.resetGame = this.resetGame.bind(this);
-        this.game.setResetHandler(this.resetGame);
-
+        this.game.setResetHandler(this.nextGame);
     }
 
     nextGame(){
+        console.log(this.player1);
+        console.log(this.player2);
         let players = this.game.playerName();
         this.player1 = new Player(players.player1.name, players.player1.type);
         this.player2 = new Player(players.player2.name, players.player2.type);
@@ -57,7 +57,6 @@ class GameController{
             this.playerPlaceholder.textContent = "Player2 position your ships";
 
             this.game.dragAllShip();
-            console.log("first case")
         } else {
             this.turn = this.player1.name;
             this.game.renderPlayer1Board(this.player1.playerGameboard);
@@ -70,17 +69,7 @@ class GameController{
 
             const resetBtn = document.querySelector("#resetBtn");
             resetBtn.style.display = 'block';
-            console.log("second case")
         }
-    }
-
-    resetGame(){
-        this.game.emptyGrid();
-
-        this.game.resetBtn.style.display = 'none';
-        this.game.player2Grid.style.display = 'none';        
-
-        this.nextGame();
     }
 
     defaultShipPlacement(gameboard){
