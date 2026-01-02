@@ -169,6 +169,7 @@ class GameController{
         
         ev.target.appendChild(document.getElementById(data));
         this.game.renderPlayer1Board(currentPlayer.playerGameboard);
+        this.game.dragAllShip();
     }
 }
 
