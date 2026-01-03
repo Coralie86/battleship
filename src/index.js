@@ -25,6 +25,9 @@ class GameController{
         this.game.setDropHandler(this.dropHandler);
 
         this.game.setResetHandler(this.nextGame);
+
+        this.rotateHandler = this.rotateHandler.bind(this);
+        this.game.setRotateHandler(this.rotateHandler);
     }
 
     nextGame(){
@@ -39,7 +42,7 @@ class GameController{
         this.game.initGrid();
 
         this.turn = this.player1.name;
-        this.game.playerPlaceholderUpdate(this.turn);
+        this.game.playerPlaceholderUpdate(this.turn + " place your Ships.");
         
         this.defaultShipPlacement(this.player1.playerGameboard)
         this.defaultShipPlacement(this.player2.playerGameboard)
@@ -49,14 +52,15 @@ class GameController{
     }
 
     startGame(){
+        this.game.errorMessageUpdate("");
         if((this.turn === this.player1.name) && (this.player2.name !== "computer")){
             this.turn = this.player2.name;
 
             this.game.renderPlayer1Board(this.player2.playerGameboard, true);
-            this.game.playerPlaceholderUpdate("Player2 position your ships")
+            this.game.playerPlaceholderUpdate(this.turn + " place your ships")
         } else {
             this.turn = this.player1.name;
-            this.game.playerPlaceholderUpdate(this.turn);
+            this.game.playerPlaceholderUpdate(this.turn + ", your turn.");
             this.game.renderPlayer1Board(this.player1.playerGameboard, false);
             this.game.renderPlayer2Board(this.player2.playerGameboard, false);
 
@@ -91,7 +95,7 @@ class GameController{
             this.game.renderPlayer2Board(player.playerGameboard, false)
 
             this.turn = opponent.name;
-            this.game.playerPlaceholderUpdate(this.turn);
+            this.game.playerPlaceholderUpdate(this.turn + ", your turn.");
         // }
     }
 
@@ -143,13 +147,30 @@ class GameController{
         
         const currentShipList = currentPlayer.playerGameboard.shipList
         const shipMoved = currentShipList.find((item) => item.id == data);
+
+        try{
+            currentPlayer.playerGameboard.placeShip([newStartRow, newStartCol], shipMoved.ship.length, shipMoved.ship.direction);
+            this.game.errorMessageUpdate("");
+        } catch(e) {
+            this.game.errorMessageUpdate(e.message);
+            return 
+        }
         
         currentPlayer.playerGameboard.removeShip(data);
-
-        currentPlayer.playerGameboard.placeShip([newStartRow, newStartCol], shipMoved.ship.length, shipMoved.ship.direction)
         
         ev.target.appendChild(document.getElementById(data));
         this.game.renderPlayer1Board(currentPlayer.playerGameboard, true);
+    }
+
+    rotateHandler(shipId, gameboard){
+        try{
+            gameboard.rotateShip(shipId);
+            this.game.renderPlayer1Board(gameboard, true);
+            this.game.errorMessageUpdate("");
+        } catch(e) {
+            this.game.errorMessageUpdate(e.message);
+            return
+        }
     }
 }
 

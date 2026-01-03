@@ -12,12 +12,14 @@ export class GameUI {
         this.nextBtn = document.querySelector("#nextBtn");
         this.player2div = document.querySelector("#player2field");
         this.checkbox = document.querySelector("#option");
+        this.message = document.querySelector("#errorMessage");
 
         this.attackHandler = null;
         this.nextHandler = null;
         this.startHandler = null;
         this.dropHandler = null;
         this.resetHandler = null;
+        this.rotateHandler = null;
 
         this.startBtn.addEventListener('click', () => {this.startHandler()});
         this.resetBtn.addEventListener('click', () =>{this.reset()});
@@ -105,6 +107,10 @@ export class GameUI {
         this.resetHandler = handler;
     }
 
+    setRotateHandler(handler){
+        this.rotateHandler = handler;
+    }
+
     reset(){
         this.emptyGrid();
 
@@ -178,8 +184,7 @@ export class GameUI {
                 shipMask.style.cursor = 'pointer';
                 shipMask.addEventListener('dragstart', (ev) => {this.dragStartHandler(ev)});
                 shipMask.addEventListener('click', () => {
-                    gameboard.rotateShip(ship.id);
-                    this.renderPlayer1Board(gameboard, true);                
+                    this.rotateHandler(ship.id, gameboard);                                  
                 })
             }            
             cellStart.appendChild(shipMask);   
@@ -223,5 +228,9 @@ export class GameUI {
         this.startBtn.style.display = 'none';
         this.player2Grid.style.display = 'block';
         this.resetBtn.style.display = 'block';
+    }
+
+    errorMessageUpdate(error){
+        this.message.textContent = error;
     }
 }
