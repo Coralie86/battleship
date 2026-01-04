@@ -37,7 +37,11 @@ class GameController{
         }
         this.player1 = new Player(players.player1.name, players.player1.type);
         this.player2 = new Player(players.player2.name, players.player2.type);
-        
+
+        if(this.player2.name !== "computer"){
+            this.player1.password = prompt(`${this.player1.name} set password`);
+            this.player2.password = prompt(`${this.player2.name} set password`);
+        }
 
         this.game.initGrid();
 

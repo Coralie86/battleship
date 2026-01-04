@@ -30,6 +30,7 @@ export class GameUI {
                 this.player2div.style.display = 'block';
             } else {
                 this.player2div.style.display = 'none';
+                document.querySelector("#player2").value = "";
             }
         })
 

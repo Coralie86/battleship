@@ -6,7 +6,6 @@ export class Player {
         this.name = name;
         this.type = type;
         this.playerGameboard = new Gameboard();
-        this.password = prompt(`${this.name} set password`);
     }
 
     attack(opponentBoard, row, col){
