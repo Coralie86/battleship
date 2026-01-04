@@ -1,17 +1,116 @@
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 80px;
+    background-color: rgb(43, 18, 66);
+    color: white;
+    font-family: sans-serif;
+    font-size: 20px;
+}
+
+h1 {
+    margin-bottom: 60px;
+}
+
+#playerBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+    background-color: rgb(42, 5, 58);
+    padding: 30px;
+    border-radius: 15px;
+}
+
 #boards {
     display: flex;
     gap: 20px;
 }
 
+#btns {
+    display: flex;
+    width: 100%;
+    justify-content: space-around;
+    /* gap: 50px; */
+}
+
+#optionPlayer2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+button {
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+#option {
+    accent-color: white;
+    height: 20px;
+    margin: 0px;
+    width: 20px;
+    cursor: pointer;
+}
+
+#option:hover, #nextBtn:hover, input:hover, button:hover{
+    box-shadow: 0 0 10px rgb(223, 228, 226);
+}
+
 .cell {
-    border: solid, rgba(211, 208, 208, 0.39), 1px;
     width: 40px;
     height: 40px;
-    color: black;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
+    border: 1px solid rgba(236, 238, 237, 0.384);
+    border-top: none;
+    border-left: none;
+}
+
+/* Add left border to first cell in each row */
+.row > .cell:first-child {
+    border-left: 1px solid rgba(236, 238, 237, 0.384);
+}
+
+/* Add top border to first row */
+#player1grid .row:first-of-type > .cell, #player2grid .row:first-of-type > .cell  {
+    border-top: 1px solid rgba(236, 238, 237, 0.384);
+}
+
+#player1grid{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#player2grid{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+input[type="text"] {
+  font-size: 18px;
+}
+
+#playerName {
+    margin: 10px 0px 40px 0px;
+    width: 420px;
+    text-align: center;
+    /* white-space: normal; */
+}
+
+.placeholder{
+    padding-bottom: 10px;
+    margin-top: 20px;
+    font-size: 16px;
 }
 
 .touched{
@@ -36,7 +135,7 @@
 
 .ship {
     box-sizing: border-box;
-    box-shadow: inset 0 0 0 4px rgb(13, 131, 199);
+    box-shadow: inset 0 0 0 2px rgb(94, 252, 2);
     position:absolute;
     left:0;
     top:0;
@@ -51,4 +150,24 @@
 #startGame, #resetBtn {
     height: 30px;
     cursor: pointer;
+}
+
+#game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#NewGame {
+    margin-bottom: 10px;
+    /* align-self: flex-start; */
+}
+
+#startGame, #resetBtn {
+    height: 40px;
+}
+
+#errorMessage{
+    margin-bottom: 20px;
+    color: rgb(241, 34, 34);
 }

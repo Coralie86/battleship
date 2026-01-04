@@ -14,27 +14,27 @@
                 <input type="text" id="player1" name="player1" class="player">
             </div>
             <div id="optionPlayer2">
-                <label for="option">Currently you are against the computer.<br> Do you want to play against another Player?</label>
+                <label for="option">Currently you are against the computer.<br> Do you want to play against another Player?<br></label>
                 <input type="checkbox" id="option" name="option">
             </div>
             <div id="player2field" style="display: none;">
                 <label for="player2">Player 2:</label>
-                <input id="player2" name="player2" class="player" value="">
+                <input type="text" id="player2" name="player2" class="player" value="">
             </div>
-            <button id="nextBtn">Next</button>
+            <button id="nextBtn">NEXT</button>
         </div>
     </div>
     <div id="game">
-        <button id="NewGame">NEW GAME</button>
+        <div id="btns">
+            <button id="NewGame">NEW GAME</button>
+            <button id="startGame" style="display: none;">START GAME</button>
+            <button id="resetBtn" style="display: none;">RESET</button>  
+        </div>        
         <div id="playerName">PLAYER</div>
         <div id="errorMessage"></div>
         <div id="boards">
-            <div id="player1grid" class="grid">
-            </div>
-            <button id="startGame" style="display: none;">Start Game</button>
-            <div id="player2grid" class="grid" style="display: none;">
-            </div>   
-            <button id="resetBtn" style="display: none;">Reset</button>     
+            <div id="player1grid" class="grid"></div>            
+            <div id="player2grid" class="grid" style="display: none;"></div>                  
         </div>
     </div>
 </body>

@@ -42,7 +42,7 @@ export class GameUI {
 
     initGrid(){
         this.playerBox.style.display = 'none';
-        this.secondPage.style.display = 'block';
+        this.secondPage.style.display = 'flex';
         this.startBtn.style.display = 'block';
 
         this.createGrid(this.player1Grid, false);
@@ -63,7 +63,7 @@ export class GameUI {
         }else {
             placeholder.textContent = "Opponent's Grid";
         }    
-        grid.appendChild(placeholder)
+        
 
         for(let i = 0; i <= 9; i++){
             let row = document.createElement("div");
@@ -84,6 +84,7 @@ export class GameUI {
             row.appendChild(cell);
             }
         grid.appendChild(row);
+        grid.appendChild(placeholder);
         }       
     }
 
@@ -122,7 +123,7 @@ export class GameUI {
     initialize(){
         this.emptyGrid();
         this.secondPage.style.display = 'none';
-        this.playerBox.style.display = 'block';
+        this.playerBox.style.display = 'flex';
         this.resetBtn.style.display = 'none';
         this.player2Grid.style.display = 'none';
     }      
@@ -173,11 +174,11 @@ export class GameUI {
             shipMask.classList.add("ship");
 
             if(ship.ship.direction === 'horizontal'){
-                shipMask.style.width = `${length * 42}px`;
-                shipMask.style.height = '42px';
+                shipMask.style.width = `${length * 41}px`;
+                shipMask.style.height = '41px';
             } else {
-                shipMask.style.width = '42px';
-                shipMask.style.height = `${length * 42}px`;                
+                shipMask.style.width = '41px';
+                shipMask.style.height = `${length * 41}px`;                
             }
             if(draggable){
                 shipMask.draggable = true;
@@ -226,7 +227,7 @@ export class GameUI {
 
     inGameState(){
         this.startBtn.style.display = 'none';
-        this.player2Grid.style.display = 'block';
+        this.player2Grid.style.display = 'flex';
         this.resetBtn.style.display = 'block';
     }
 

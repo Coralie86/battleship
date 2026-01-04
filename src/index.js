@@ -42,7 +42,7 @@ class GameController{
         this.game.initGrid();
 
         this.turn = this.player1.name;
-        this.game.playerPlaceholderUpdate(this.turn + " place your Ships.");
+        this.game.playerPlaceholderUpdate(this.turn + " place your ships. Click on the ship to change the orientation.");
         
         this.defaultShipPlacement(this.player1.playerGameboard)
         this.defaultShipPlacement(this.player2.playerGameboard)
@@ -57,7 +57,7 @@ class GameController{
             this.turn = this.player2.name;
 
             this.game.renderPlayer1Board(this.player2.playerGameboard, true);
-            this.game.playerPlaceholderUpdate(this.turn + " place your ships")
+            this.game.playerPlaceholderUpdate(this.turn + " place your ships. Click on the ship to change the orientation.")
         } else {
             this.turn = this.player1.name;
             this.game.playerPlaceholderUpdate(this.turn + ", your turn.");
