@@ -19,13 +19,12 @@ export class Gameboard {
             end[0] = row;
         }
         
+        if(![row,col,end[0],end[1]].every(x => x >= 0 && x <= 9)){
+            throw new Error('Coordinates out of board 10 x 10')
+        }
 
         if(this.spaceAvailable([row,col], [end[0], end[1]], direction) === false){
             throw new Error('Space not available')
-        }              
-
-        if(![row,col,end[0],end[1]].every(x => x >= 0 && x <= 9)){
-            throw new Error('Coordinates out of board 10 x 10')
         }
 
         this.removeShip(`ship-r${row}-c${col}`); //in case it already exists
@@ -107,11 +106,9 @@ export class Gameboard {
             end[1] = ship.coord[0][1] + Number(length) -1;
             end[0] = ship.coord[0][0];
         }
-        
+
         if(this.spaceAvailable([ship.coord[0][0], ship.coord[0][1]], [end[0],end[1]], newDirection)){
             this.placeShip([ship.coord[0][0], ship.coord[0][1]], ship.ship.length, newDirection);
-        } else{
-            throw new Error('Space not available')
         }
     }
 }

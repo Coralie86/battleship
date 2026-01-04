@@ -169,6 +169,7 @@ class GameController{
             this.game.errorMessageUpdate("");
         } catch(e) {
             this.game.errorMessageUpdate(e.message);
+            console.log(e)
             return
         }
     }
