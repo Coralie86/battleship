@@ -90,13 +90,13 @@ class GameController{
         }
 
         // after attack we show opponent view
-        // if(opponent.password === prompt(`Password ${opponent.name}`)){
+        if(opponent.password === prompt(`Password ${opponent.name}`)){
             this.game.renderPlayer1Board(opponent.playerGameboard, false)
             this.game.renderPlayer2Board(player.playerGameboard, false)
 
             this.turn = opponent.name;
             this.game.playerPlaceholderUpdate(this.turn + ", your turn.");
-        // }
+        }
     }
 
     playWithComputer(player, opponent, row, col){
